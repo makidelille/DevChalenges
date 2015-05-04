@@ -9,7 +9,7 @@ public class HalloweenParty {
 		Scanner sc = new Scanner(System.in);
 		int t = sc.nextInt();
 		for (int a=0; a < t;a++){
-			System.out.println((int)Math.floor(Math.pow(sc.nextInt()/2f, 2)));
+			System.out.println((long)Math.floor((long)Math.pow((long)sc.nextInt()/2f, 2)));
 		}
 		
 		
