@@ -13,7 +13,7 @@ public class GameOfThrones_I {
 		for(int i=0; i< s.length(); i++){
 			char c = s.charAt(i);
 			if(charCount.containsKey((Character)c)){
-				charCount.put((Character)c,++charCount.get((Character)c));
+				charCount.put((Character)c,charCount.get((Character)c)+1);
 			}else{
 				charCount.put((Character)c, 1);
 			}
