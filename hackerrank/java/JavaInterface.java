@@ -8,7 +8,7 @@ public class JavaInterface {
     }
 
     public static int divisorSum(int n) {
-	int sum =  1 +n;
+	int sum =  n > 1 ? 1 +n : 1;
 	for(int i = 2; i<= n/2; i++){
 	    if(n % i == 0) sum += i;
 	}
