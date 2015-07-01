@@ -9,6 +9,7 @@ public class InsertionSortP1 {
 	int s = sc.nextInt();
 	int[] arr = new int[s];
 	for(int i=0; i< s; i++) arr[i] = sc.nextInt();
+	//sorts 1 element
 	int toSort = arr[s-1];
 	for(int j = s-2; j >= 0 ; j--){
 	    boolean found = true;
