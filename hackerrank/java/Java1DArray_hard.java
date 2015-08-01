@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Java1DArray {
+public class Java1DArray_hard {
 
     public static void main(String[] args) {
 	Scanner sc = new Scanner(System.in);
