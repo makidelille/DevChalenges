@@ -17,8 +17,11 @@ for(let i=1; i<= 4; i++){
     let expected = fs.readFileSync(path.resolve(__dirname, `input/${inputFolderNb}`, `output${i}.txt`), "utf8");
 
     eval(funct);
-
-    computeResult();
+    try{
+        computeResult();
+    }catch(err){
+        console.error(err);
+    }
 
     if(returnValue != expected){
         console.error(`FAILED test ${i} \n\t=> RETURN ${returnValue} \n\t TARGET ${expected}\n`);
