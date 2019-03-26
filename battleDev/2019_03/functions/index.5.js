@@ -25,13 +25,18 @@ function computeResult(){
 
         let leftChain = [];
         let rightChain = [];
-        let availbleLeft = '*', availbleRight = '*', leftL = [], leftR = [];
 
-        availbleLeft = availble[Math.floor(position)]
-        leftL = availble.slice();
+
+        let availbleLeft = availble[Math.floor(position)] || '*';
+        let availbleRight = availble[Math.ceil(position)] || '*';
+
+        let availbleLeftNext = availble[Math.floor(position-1)] || '*';
+        let availbleRightNext = availble[Math.ceil(position+1)] || '*';
+        
+        let leftL = availble.slice();
         leftL.splice(Math.floor(position), 1)
-        availbleRight = availble[Math.ceil(position)];
-        leftR = availble.slice();
+        
+        let leftR = availble.slice();
         leftR.splice(Math.ceil(position), 1);
 
         if(position < 0){
@@ -43,6 +48,13 @@ function computeResult(){
             if(row[availbleLeft] === 'o' && row[availbleRight] === '*'){
                 return getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
             } else if(row[availbleRight] === 'o' && row[availbleLeft] === '*'){
+                return getBestSol(leftR, [...currentSeq, availbleRight], position);
+            }
+            // on regarde un coup en avance
+
+            if(row[availbleLeftNext] === 'o' && row[availbleRightNext] === '*'){
+                return getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
+            } else if(row[availbleRightNext] === 'o' && row[availbleLeftNext] === '*'){
                 return getBestSol(leftR, [...currentSeq, availbleRight], position);
             }
 
