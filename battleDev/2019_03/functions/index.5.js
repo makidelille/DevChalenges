@@ -5,78 +5,41 @@ function ContestResponse(){
     let row = input[1].split('');
     let current = row.indexOf('X');
 
-    function score(seq){
-        let sc = 0;
-        for(let ele of seq){
-            if(row[ele] === 'o'){
-                sc++;
-            } else if(row[ele] === '*'){
-                sc = sc * 2;
-            }
+    let choices = row.slice().map((_,i) => i);
+    choices.splice(current, 1);
+    let best = [];
+    let curIndex = current;
+
+    function dist2o(choices, pos, backward){
+        let cpy = choices.slice();
+        if(backward){
+            cpy.reverse();
         }
 
-        return sc;
+        cpy = cpy.slice(pos).map(e => row[e]);
+
+        return cpy.indexOf('o') === -1 ? Infinity :  cpy.indexOf('o');
+
     }
 
-    function getBestSol(availble, currentSeq, position){
-        if(availble.length < 2){
-            return availble.length ? [...currentSeq, availble[0]] : currentSeq;
-        }
+    while(choices.length > 1){
+        let left =  choices[curIndex-1];
+        let right = choices[curIndex];
 
-        let leftChain = [];
-        let rightChain = [];
-
-
-        let availbleLeft = availble[Math.max(Math.floor(position), 0)];
-        let availbleRight = availble[Math.min(Math.ceil(position),availble.length - 1)];
-
-        let availbleLeftNext = availble[Math.max(Math.floor(position-1), 1)];
-        let availbleRightNext = availble[Math.max(Math.ceil(position+1), availble.length - 2)];
-        
-        let leftL = availble.slice();
-        leftL.splice(Math.floor(position), 1)
-        
-        let leftR = availble.slice();
-        leftR.splice(Math.ceil(position), 1);
-
-        if(position < 0 || position > availble.length - 1){
-            return [...currentSeq, ...availble.slice()];
+        if(dist2o(choices, curIndex, true) < dist2o(choices, curIndex, false)){
+            best.push(left);
+            choices.splice(curIndex-1, 1);
+            curIndex--;
         } else {
-            // on va toujours préféré o à *
-            if(row[availbleLeft] === 'o' && row[availbleRight] === '*'){
-                return getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
-            } else if(row[availbleRight] === 'o' && row[availbleLeft] === '*'){
-                return getBestSol(leftR, [...currentSeq, availbleRight], position);
-            }
-            // on regarde un coup en avance
-
-            if(row[availbleLeftNext] === 'o' && row[availbleRightNext] === '*' && row[availbleRight] != 'o' ){
-                return getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
-            } else if(row[availbleRightNext] === 'o' && row[availbleLeftNext] === '*' && row[availbleLeft] != 'o'){
-                return getBestSol(leftR, [...currentSeq, availbleRight], position);
-            }
-
-            leftChain = getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
-            rightChain = getBestSol(leftR, [...currentSeq, availbleRight], position);
-    
-            if(score(leftChain) > score(rightChain)){
-                return leftChain;
-            } else {
-                return rightChain;
-            }
+            best.push(right);
+            choices.splice(curIndex, 1);
         }
-
-       
-
-
-
-
+        curIndex = Math.max(curIndex, 0);
+        curIndex = Math.min(curIndex, choices.length -1 );
     }
 
-    let av=  row.map((_, i) => i);
-    av.splice(current, 1);
+    best.push(choices[0]);
 
-    let best = getBestSol(av, [], current - 0.5)
 
     console.log(best.map(e => row[e]).join(''));
 
