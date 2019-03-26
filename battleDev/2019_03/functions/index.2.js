@@ -1,5 +1,5 @@
 
-function computeResult(){
+function ContestResponse(){
     let n = +input[0];
     let curMass = 0;
     let ar = 1;

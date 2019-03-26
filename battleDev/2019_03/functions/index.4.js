@@ -1,4 +1,4 @@
-function computeResult(){
+function ContestResponse(){
     let n = +input[0];
     let wordArray = [];
 

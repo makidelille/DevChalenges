@@ -1,5 +1,5 @@
 
-function computeResult(){
+function ContestResponse(){
     let n = +input[0];
 
     let row = input[1].split('');
@@ -27,11 +27,11 @@ function computeResult(){
         let rightChain = [];
 
 
-        let availbleLeft = availble[Math.floor(position)] || '*';
-        let availbleRight = availble[Math.ceil(position)] || '*';
+        let availbleLeft = availble[Math.max(Math.floor(position), 0)];
+        let availbleRight = availble[Math.min(Math.ceil(position),availble.length - 1)];
 
-        let availbleLeftNext = availble[Math.floor(position-1)] || '*';
-        let availbleRightNext = availble[Math.ceil(position+1)] || '*';
+        let availbleLeftNext = availble[Math.max(Math.floor(position-1), 1)];
+        let availbleRightNext = availble[Math.max(Math.ceil(position+1), availble.length - 2)];
         
         let leftL = availble.slice();
         leftL.splice(Math.floor(position), 1)
@@ -39,10 +39,8 @@ function computeResult(){
         let leftR = availble.slice();
         leftR.splice(Math.ceil(position), 1);
 
-        if(position < 0){
-            return getBestSol(leftR, [...currentSeq, availbleRight], position);
-        } else if(position > availble.length - 1 ){
-            return getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
+        if(position < 0 || position > availble.length - 1){
+            return [...currentSeq, ...availble.slice()];
         } else {
             // on va toujours préféré o à *
             if(row[availbleLeft] === 'o' && row[availbleRight] === '*'){
@@ -52,9 +50,9 @@ function computeResult(){
             }
             // on regarde un coup en avance
 
-            if(row[availbleLeftNext] === 'o' && row[availbleRightNext] === '*'){
+            if(row[availbleLeftNext] === 'o' && row[availbleRightNext] === '*' && row[availbleRight] != 'o' ){
                 return getBestSol(leftL, [...currentSeq, availbleLeft], position - 1);
-            } else if(row[availbleRightNext] === 'o' && row[availbleLeftNext] === '*'){
+            } else if(row[availbleRightNext] === 'o' && row[availbleLeftNext] === '*' && row[availbleLeft] != 'o'){
                 return getBestSol(leftR, [...currentSeq, availbleRight], position);
             }
 

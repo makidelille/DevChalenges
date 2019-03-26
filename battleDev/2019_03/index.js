@@ -18,13 +18,13 @@ for(let i=1; i<= 4; i++){
 
     eval(funct);
     try{
-        computeResult();
+        ContestResponse();
     }catch(err){
         console.error(err);
     }
 
     if(returnValue != expected){
-        console.error(`FAILED test ${i} \n\t=> RETURN ${returnValue} \n\t TARGET ${expected}\n`);
+        console.error(`FAILED test ${i} =>\n\t RETURN ${returnValue} \n\t TARGET ${expected}\n`);
     } else {
         console.info(`SUCCES test ${i}\n`);
     }
