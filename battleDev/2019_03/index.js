@@ -9,7 +9,7 @@ console.log = function(message){
 
 var inputFolderNb = 5;
 
-let funct = fs.readFileSync(path.resolve(__dirname,`index.${inputFolderNb}.js`), 'utf8');
+let funct = fs.readFileSync(path.resolve(__dirname, "functions", `index.${inputFolderNb}.js`), 'utf8');
 
 
 for(let i=1; i<= 4; i++){
