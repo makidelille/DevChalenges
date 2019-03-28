@@ -14,6 +14,7 @@ function ContestResponse(){
         let cpy = choices.slice();
         if(backward){
             cpy.reverse();
+            pos = choices.length - pos;
         }
 
         cpy = cpy.slice(pos).map(e => row[e]);
