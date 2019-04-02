@@ -1,48 +1,79 @@
+function score(seq) {
+    let sc = 0;
+    for (let ele of seq) {
+        if (ele === 'o') {
+            sc++;
+        } else if (ele === '*') {
+            sc = sc * 2;
+        }
+    }
 
-function ContestResponse(){
+    return sc;
+}
+
+function ContestResponse() {
     let n = +input[0];
 
     let row = input[1].split('');
     let current = row.indexOf('X');
+    let left = row.slice(0, current);
+    let right = row.slice(current + 1, row.length);
 
-    let choices = row.slice().map((_,i) => i);
-    choices.splice(current, 1);
-    let best = [];
-    let curIndex = current;
+    counter = 0;
+    function getBestSol(left, right, memo) {
+        // On part du dernier movement :
+        // La personne à le choix de prendre le dernier element a droite ou a gauche
+        // On calcule le max des deux choix et on prend la meilleure des deux solutions
+        // Pour chacun des choix, la valeur est égale à la meilleure solution en enlevant l'élément à droite ou à gauche * 2 ou +1 selon l'élément en question
+        // MEMO
+        let memoCur = memo[left.length + ',' + right.length];
+        if (memoCur) {
+            return memoCur;
+        }
+        // Condition d'arrêt
+        if (left.length == 0) {
+            return {max : score(right), seq : right.slice()}
+        }
+        if (right.length == 0) {
+            let copy = left.slice();
+            copy.reverse();
+            return { max: score(copy), seq: copy.slice()};
+        }
+        //Recursion
+        let leftEl = left[0];
+        let rightEl = right[right.length - 1];
 
-    function dist2o(choices, pos, backward){
-        let cpy = choices.slice();
-        if(backward){
-            cpy.reverse();
-            pos = choices.length - pos;
+        let subLeftSol = getBestSol(left.slice(1), right.slice(), memo);
+        let newLeftSeq = subLeftSol.seq.slice();
+        newLeftSeq.push(leftEl);
+        let leftSol = {
+            max: (leftEl === "*" ? (subLeftSol.max * 2) : (subLeftSol.max + 1)),
+            seq: newLeftSeq
         }
 
-        cpy = cpy.slice(pos).map(e => row[e]);
+        let subRightSol = getBestSol(left.slice(), right.slice(0, right.length - 1), memo);
+        let newRightSeq = subRightSol.seq.slice();
+        newRightSeq.push(rightEl);
+        let rightSol = {
+            max: (rightEl === "*" ? (subRightSol.max * 2) : (subRightSol.max + 1)),
+            seq: newRightSeq
+        }
 
-        return cpy.indexOf('o') === -1 ? Infinity :  cpy.indexOf('o');
-
-    }
-
-    while(choices.length > 1){
-        let left =  choices[curIndex-1];
-        let right = choices[curIndex];
-
-        if(dist2o(choices, curIndex, true) < dist2o(choices, curIndex, false)){
-            best.push(left);
-            choices.splice(curIndex-1, 1);
-            curIndex--;
+        if (leftSol.max >= rightSol.max) {
+            memo[left.length + ',' + right.length] = leftSol;
+            return leftSol;
         } else {
-            best.push(right);
-            choices.splice(curIndex, 1);
-        }
-        curIndex = Math.max(curIndex, 0);
-        curIndex = Math.min(curIndex, choices.length -1 );
+            memo[left.length + ',' + right.length] = rightSol;
+            return rightSol;
+        };
     }
-
-    best.push(choices[0]);
-
-
-    console.log(best.map(e => row[e]).join(''));
+    console.info(`Inp: ${row.join('')}`);
+    console.info(`left: ${left.join('')}`);
+    console.info(`right: ${right.join('')}`);
+    let sol = getBestSol(left, right, {});
+    console.info(`SEQ: ${sol.seq.join('')}`);
+    console.info(`SCORE CALC: ${sol.max}`);
+    console.log(sol.seq.join(''));
 
 
 
